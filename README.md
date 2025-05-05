@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koumoul - Données et Open Data</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vue.js CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div id="app" class="max-w-5xl mx-auto p-6" v-cloak>
+    <header class="text-center py-6">
+      <h1 class="text-4xl font-bold text-blue-700">Koumoul</h1>
+      <p class="text-lg mt-2">Solutions open data à Saint-Avé</p>
+    </header>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">Nos services</h2>
+      <ul class="space-y-3">
+        <li v-for="service in services" :key="service" class="p-4 bg-white rounded-lg shadow">
+          {{ service }}
+        </li>
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">Portails en ligne</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="bg-white p-4 rounded shadow" v-for="portal in portals" :key="portal.name">
+          <h3 class="text-xl font-bold">{{ portal.name }}</h3>
+          <p class="text-gray-600">{{ portal.description }}</p>
+          <a :href="portal.link" class="text-blue-500 underline mt-2 inline-block" target="_blank">Accéder au portail</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">Jeux interactifs</h2>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button @click="openGame('https://www.jeux.fr/jeu/pacman')" class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Jouer à Pac-Man</button>
+        <button @click="openGame('https://www.jeuxjeuxjeux.fr/jeu/tetris')" class="bg-purple-500 text-white px-4 py-2 rounded shadow hover:bg-purple-600">Jouer à Tetris</button>
+        <button @click="openGame('https://www.jeux.fr/jeu/2048')" class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600">Jouer à 2048</button>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">L'équipe</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="bg-white p-4 rounded shadow" v-for="person in team" :key="person.name">
+          <h3 class="text-xl font-bold">{{ person.name }}</h3>
+          <p class="text-gray-600">{{ person.role }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">Contact</h2>
+      <p><strong>Adresse :</strong> 1 rue Jean Guyomarc'h, 56890 Saint-Avé</p>
+      <p><strong>Tél :</strong> +33 2 97 26 22 41</p>
+      <p><strong>Email :</strong> <a href="mailto:contact@koumoul.com" class="text-blue-500">contact@koumoul.com</a></p>
+    </section>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          services: [
+            'Portail Open Data',
+            'Visualisations interactives',
+            'Partage sécurisé de données',
+            'Accès aux données de référence via API'
+          ],
+          portals: [
+            {
+              name: 'Koesio',
+              description: 'Découvrez les solutions numériques globales proposées par le groupe Koesio pour les entreprises.',
+              link: 'https://koesio.com/'
+            },
+            {
+              name: 'Data Fair Koumoul',
+              description: 'Accédez à la plateforme Data Fair de Koumoul pour explorer et valoriser vos données.',
+              link: 'https://staging-koumoul.com/data-fair/'
+            }
+          ],
+          team: [
+            { name: 'Nicolas Bonnel', role: 'Président' },
+            { name: 'Alban Mouton', role: 'Directeur général' }
+          ]
+        }
+      },
+      methods: {
+        openGame(url) {
+          window.open(url, '_blank');
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
