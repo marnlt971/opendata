@@ -6,33 +6,29 @@
   <title>Koumoul - Données et Open Data</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="https://unpkg.com/scrollreveal"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  <style>
-    [v-cloak] { display: none; }
-  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div id="app" class="max-w-5xl mx-auto p-6" v-cloak>
     <header class="text-center py-6">
-      <h1 class="text-4xl font-bold text-blue-700 animate-bounce">Koumoul</h1>
+      <h1 class="text-4xl font-bold text-blue-700">Koumoul</h1>
       <p class="text-lg mt-2">Solutions open data à Saint-Avé</p>
-      <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_ktwnwv5m.json"  background="transparent" speed="1" style="width: 100px; height: 100px; margin: auto;" loop autoplay></lottie-player>
     </header>
 
-    <section class="mb-10" id="services">
+    <section class="mb-10">
       <h2 class="text-2xl font-semibold text-blue-600 mb-4">Nos services</h2>
       <ul class="space-y-3">
-        <li v-for="service in services" :key="service" class="p-4 bg-white rounded-lg shadow hover:scale-105 transition-transform duration-300">
+        <li v-for="service in services" :key="service" class="p-4 bg-white rounded-lg shadow">
           {{ service }}
         </li>
       </ul>
     </section>
 
-    <section class="mb-10" id="portals">
+    <section class="mb-10">
       <h2 class="text-2xl font-semibold text-blue-600 mb-4">Portails en ligne</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="bg-white p-4 rounded shadow hover:shadow-xl transition-shadow duration-300" v-for="portal in portals" :key="portal.name">
+        <div class="bg-white p-4 rounded shadow" v-for="portal in portals" :key="portal.name">
           <h3 class="text-xl font-bold">{{ portal.name }}</h3>
           <p class="text-gray-600">{{ portal.description }}</p>
           <a :href="portal.link" class="text-blue-500 underline mt-2 inline-block" target="_blank">Accéder au portail</a>
@@ -40,31 +36,36 @@
       </div>
     </section>
 
-    <section class="mb-10" id="games">
+    <section class="mb-10">
       <h2 class="text-2xl font-semibold text-blue-600 mb-4">Jeux interactifs</h2>
       <div class="flex flex-col sm:flex-row gap-4">
-        <button @click="openGame('https://www.jeux.fr/jeu/pacman')" class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transform hover:scale-105 transition-transform duration-300">Jouer à Pac-Man</button>
-        <button @click="openGame('https://www.jeuxjeuxjeux.fr/jeu/tetris')" class="bg-purple-500 text-white px-4 py-2 rounded shadow hover:bg-purple-600 transform hover:scale-105 transition-transform duration-300">Jouer à Tetris</button>
-        <button @click="openGame('https://www.jeux.fr/jeu/2048')" class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transform hover:scale-105 transition-transform duration-300">Jouer à 2048</button>
+        <button @click="openGame('https://www.jeux.fr/jeu/pacman')" class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Jouer à Pac-Man</button>
+        <button @click="openGame('https://www.jeuxjeuxjeux.fr/jeu/tetris')" class="bg-purple-500 text-white px-4 py-2 rounded shadow hover:bg-purple-600">Jouer à Tetris</button>
+        <button @click="openGame('https://www.jeux.fr/jeu/2048')" class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600">Jouer à 2048</button>
       </div>
     </section>
 
-    <section class="mb-10" id="team">
+    <section class="mb-10">
       <h2 class="text-2xl font-semibold text-blue-600 mb-4">Fondateurs</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="bg-white p-4 rounded shadow hover:shadow-lg transition-shadow duration-300" v-for="person in team" :key="person.name">
+        <div class="bg-white p-4 rounded shadow" v-for="person in team" :key="person.name">
           <h3 class="text-xl font-bold">{{ person.name }}</h3>
           <p class="text-gray-600">{{ person.role }}</p>
         </div>
       </div>
     </section>
 
-    <section class="mb-10" id="contact">
+    <section class="mb-10">
       <h2 class="text-2xl font-semibold text-blue-600 mb-4">Contact</h2>
       <p><strong>Adresse :</strong> 1 rue Jean Guyomarc'h, 56890 Saint-Avé</p>
       <p><strong>Tél :</strong> +33 2 97 26 22 41</p>
       <p><strong>Email :</strong> <a href="mailto:contact@koumoul.com" class="text-blue-500">contact@koumoul.com</a></p>
+      <div id="map" class="h-64 mt-4 rounded shadow"></div>
     </section>
+
+    <footer class="text-center text-sm text-gray-500 mt-10">
+      &copy; 2025 Koumoul. Tous droits réservés.
+    </footer>
   </div>
 
   <script>
@@ -81,12 +82,12 @@
           portals: [
             {
               name: 'Data-Gouv',
-              description: 'Plateforme française d’accès libre aux données publiques.',
+              description: 'Découvrez la plateforme française qui permet lʼaccès libre aux données publiques pour favoriser la transparence lʼinnovation et la réutilisation par les citoyens entreprises et administrations.',
               link: 'https://www.data.gouv.fr/fr/'
             },
             {
               name: 'Data Fair Koumoul',
-              description: 'Explorez et valorisez vos données via la plateforme Data Fair.',
+              description: 'Accédez à la plateforme Data Fair de Koumoul pour explorer et valoriser vos données.',
               link: 'https://koumoul.com/'
             }
           ],
@@ -104,13 +105,13 @@
         }
       },
       mounted() {
-        ScrollReveal().reveal('#services, #portals, #games, #team, #contact', {
-          distance: '40px',
-          duration: 1000,
-          easing: 'ease-out',
-          origin: 'bottom',
-          interval: 200
-        });
+        const map = L.map('map').setView([47.7009, -2.7579], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributeurs'
+        }).addTo(map);
+        L.marker([47.7009, -2.7579]).addTo(map)
+          .bindPopup("1 rue Jean Guyomarc'h, Saint-Avé")
+          .openPopup();
       }
     }).mount('#app')
   </script>
